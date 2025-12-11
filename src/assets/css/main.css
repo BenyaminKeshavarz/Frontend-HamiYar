@@ -1,0 +1,397 @@
+@import './font-face.css';
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+@custom-variant hover (&:hover);
+
+/* Utilities */
+@utility container {
+  margin-inline: auto;
+
+  /* @media (min-width: 1024px) {
+    max-width: 1100px;
+  } */
+  @media (min-width: 1280px) {
+    max-width: 1280px;
+  }
+  @media (min-width: 1440px) {
+    max-width: 1280px;
+  }
+  @media (min-width: 1920px) {
+    max-width: 1550px;
+  }
+  @media (min-width: 2560px) {
+    max-width: 1900px;
+  }
+}
+@utility dir-rtl {
+  direction: rtl;
+}
+@utility dir-ltr {
+  direction: ltr;
+}
+@utility container-padding {
+  @apply px-4 xs:px-6 sm:px-10;
+}
+@utility flex-center {
+  @apply flex items-center justify-center;
+}
+@utility shadow-surround {
+  box-shadow: 0 0 60px 0 rgba(0, 0, 0, 0.1);
+}
+/* @utility bg-gradient-primary-to-* {
+  background-image: linear-gradient(
+    --value(--gradient-to-*),
+    var(--color-brand-primary-900),
+    var(--color-brand-primary-600),
+    var(--color-brand-primary-700)
+  );
+} */
+
+/* ---------- Flex ---------- */
+@utility flex-center {
+  @apply flex items-center justify-center;
+}
+@utility flex-row-* {
+  display: flex;
+  flex-direction: row;
+  justify-content: --value(--justify-*);
+  align-items: center;
+}
+@utility flex-row-reverse-* {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: --value(--justify-*);
+  align-items: center;
+}
+@utility flex-col-* {
+  display: flex;
+  flex-direction: column;
+  align-items: --value(--items-*);
+  justify-content: center;
+}
+@utility flex-col-reverse-* {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: --value(--items-*);
+  justify-content: center;
+}
+
+@theme {
+  --font-vazir: 'Vazir', sans-serif;
+
+  /* *Custom font weights for typography styling */
+  --font-weight-extrablack: 950;
+
+  /* * Custom breakpoints for responsive design */
+  --breakpoint-2xs: 375px; /* Very small devices (small phones) */
+  --breakpoint-xs: 480px; /* Extra small devices (phones) */
+  --breakpoint-sm: 640px; /* Small devices (standard phones) */
+  --breakpoint-md: 768px; /* Medium devices (tablets) */
+  --breakpoint-lg: 1024px; /* Large devices (small laptops/desktops) */
+  --breakpoint-xl: 1280px; /* Extra-large devices (large laptops/desktops) */
+  --breakpoint-2xl: 1440px; /* 2x-large devices (large desktops) */
+  --breakpoint-3xl: 1920px; /* 3x-large devices (Full HD screens) */
+
+  /* * Custom gradient directions */
+  /* --gradient-to-right: to right;
+  --gradient-to-top: to top;
+  --gradient-to-bottom: to bottom;
+  --gradient-to-left: to left;
+  --gradient-to-top-right: to top right;
+  --gradient-to-top-left: to top left;
+  --gradient-to-bottom-right: to bottom right; */
+
+  /* * flex utilities  */
+  /* ---------- justify content ---------- */
+  --justify-start: flex-start;
+  --justify-end: flex-end;
+  --justify-center: center;
+  --justify-between: space-between;
+  --justify-around: space-around;
+  --justify-evenly: space-evenly;
+  --justify-stretch: stretch;
+
+  /* ---------- align items ---------- */
+  --items-center: center;
+  --items-start: start;
+  --items-end: end;
+  --items-stretch: stretch;
+  --items-baseline: baseline;
+
+  /* * Custom animations */
+  --animate-heartbeat: heartbeat 1.5s infinite;
+  @keyframes heartbeat {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  /* Brand Primary Colors - Available in Tailwind (referencing :root variables) */
+  --color-brand-primary-50: var(--color-brand-primary-50);
+  --color-brand-primary-100: var(--color-brand-primary-100);
+  --color-brand-primary-200: var(--color-brand-primary-200);
+  --color-brand-primary-300: var(--color-brand-primary-300);
+  --color-brand-primary-400: var(--color-brand-primary-400);
+  --color-brand-primary-500: var(--color-brand-primary-500);
+  --color-brand-primary-600: var(--color-brand-primary-600);
+  --color-brand-primary-700: var(--color-brand-primary-700);
+  --color-brand-primary-800: var(--color-brand-primary-800);
+  --color-brand-primary-900: var(--color-brand-primary-900);
+  --color-brand-primary-950: var(--color-brand-primary-950);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  /* Primary color mapped to brand-primary-500 - you can change this */
+  --primary: var(--color-brand-primary-500);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: var(--color-brand-primary-500);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: var(--color-brand-primary-500);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: var(--color-brand-primary-500);
+
+  /* Brand Primary Color Palette */
+  --color-brand-primary-50: #f0ebf9;
+  --color-brand-primary-100: #e2d9f4;
+  --color-brand-primary-200: #c5b3e9;
+  --color-brand-primary-300: #a584e8;
+  --color-brand-primary-400: #885be1;
+  --color-brand-primary-500: #6a32d9;
+  --color-brand-primary-600: #5321b4;
+  --color-brand-primary-700: #3e1987;
+  --color-brand-primary-800: #2a1456;
+  --color-brand-primary-900: #150a2a;
+  --color-brand-primary-950: #0a0515;
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  /* Primary color mapped to brand-primary-400 for dark mode - you can change this */
+  --primary: var(--color-brand-primary-400);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: var(--color-brand-primary-400);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: var(--color-brand-primary-400);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: var(--color-brand-primary-400);
+}
+
+@layer base {
+  /* * -----------------------------------------------------
+   * ### Base Styles - Global Styles, Typography, Backgrounds
+   * -------------------------------------------------------
+     This section defines essential base styles for your 
+     project, considering Tailwind's defaults.
+   * ------------------------------------------------------- */
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+  html[dir='rtl'] {
+    font-family: 'Vazir', sans-serif;
+  }
+
+  body {
+    scroll-behavior: smooth; /* ? Enable smooth scrolling */
+    overflow-x: hidden; /* Disable horizontal scrollbar */
+    @apply bg-background text-foreground;
+    font-family: inherit; /* Inherit font from html */
+  }
+
+  /* * -----------------------------------------------------
+   * ### Scrollbar Styling
+   * -------------------------------------------------------
+     Custom scrollbar for Webkit browsers (Chrome, Safari) and Firefox.
+   * ------------------------------------------------------- */
+
+  /* Webkit browsers */
+  ::-webkit-scrollbar {
+    width: 4px; /* Thin scrollbar width */
+    height: 4px; /* Thin scrollbar height */
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-brand-primary-800); /* Transparent track */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-brand-primary-400); /* Custom scrollbar thumb color */
+    border-radius: 10px; /* Rounded thumb */
+  }
+
+  /* Firefox */
+  * {
+    scrollbar-width: thin; /* Thin scrollbar in Firefox */
+    scrollbar-color: var(--color-brand-primary-400) var(--color-brand-primary-800); /* Custom scrollbar colors */
+  }
+
+  /* * -----------------------------------------------------
+   * ### Input Number Styling
+   * -------------------------------------------------------
+     Disables increment/decrement arrows on number inputs for consistency.
+   * ------------------------------------------------------- */
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0; /* Remove spin buttons */
+  }
+
+  input[type='number'] {
+    appearance: textfield;
+    -moz-appearance: textfield; /* Remove spin buttons in Firefox */
+  }
+
+  /* * -----------------------------------------------------
+    * ### Disable Gray Highlight on Touch Devices
+    * -------------------------------------------------------
+      Prevents the default Gray highlight when tapping buttons/links on mobile.
+    * ------------------------------------------------------- */
+
+  a,
+  button {
+    -webkit-tap-highlight-color: transparent; /* Remove highlight on touch */
+    -webkit-touch-callout: none; /* Disable touch callout in iOS */
+  }
+
+  /* * -----------------------------------------------------
+    * ### Prevent Text Selection on Interactive Elements
+    * -------------------------------------------------------
+      Disables text selection on buttons, links, images, and SVGs to improve UX.
+    * ------------------------------------------------------- */
+
+  img,
+  button,
+  a,
+  svg {
+    -webkit-user-select: none; /* Webkit browsers */
+    -khtml-user-select: none; /* Older browsers */
+    -moz-user-select: none; /* Firefox */
+    -o-user-select: none; /* Opera */
+    user-select: none; /* Disable text selection */
+  }
+
+  /* * -----------------------------------------------------
+    * ### Prevent Focus Outline for Non-Keyboard Users
+    * -------------------------------------------------------
+      Disables the outline for mouse users, but ensures accessibility for keyboard navigation.
+    * ------------------------------------------------------- */
+
+  *:focus-visible {
+    outline: none; /* Remove outline unless the user is navigating with keyboard */
+  }
+
+  /* * -----------------------------------------------------
+    * ### Text Alignment for Email and Phone Inputs
+    * -------------------------------------------------------
+      Ensures proper text alignment for email and phone inputs.
+    * ------------------------------------------------------- */
+
+  input[type='email'],
+  input[type='tel'] {
+    @apply text-left rtl:placeholder:text-right;
+  }
+
+  /* Hide the password reveal button in Edge */
+  ::-ms-reveal {
+    display: none;
+  }
+}
