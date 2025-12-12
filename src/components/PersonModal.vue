@@ -44,7 +44,7 @@ const isSubmitDisabled = computed(() => {
 });
 
 function onKeyPress(e: KeyboardEvent) {
-  if (!/[0-9]/.test(e.key)) {
+  if (!/[0-9]/.test(e.key) && e.key !== "Enter") {
     e.preventDefault();
   }
 }

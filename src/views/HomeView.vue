@@ -60,15 +60,15 @@ async function onSubmit(requestType: RequestType, identifier: number): Promise<v
         </p>
       </div>
 
-      <div class="gap-8 md:gap-4 grid grid-cols-2 max-w-2xl w-full">
+      <div class="gap-8 md:gap-4 grid grid-cols-2 max-w-xl w-full">
         <PersonModal
           v-model="identifiers.education"
           :is-submitting="isSubmittingByType('education')"
           @submit="(identifier) => onSubmit('education', identifier)"
         >
           <template #trigger-content>
-            <Icon icon="mdi:school" class="size-10" />
-            <span class="text-xl">گواهی اشتغال به تحصیل</span>
+            <Icon icon="mdi:school" class="size-9" />
+            <span class="text-lg">گواهی اشتغال به تحصیل</span>
           </template>
         </PersonModal>
 
@@ -78,8 +78,8 @@ async function onSubmit(requestType: RequestType, identifier: number): Promise<v
           @submit="(identifier) => onSubmit('internship', identifier)"
         >
           <template #trigger-content>
-            <Icon icon="mdi:briefcase" class="size-10" />
-            <span class="text-xl">نامه کارآموزی</span>
+            <Icon icon="mdi:briefcase" class="size-9" />
+            <span class="text-lg">نامه کارآموزی</span>
           </template>
         </PersonModal>
       </div>

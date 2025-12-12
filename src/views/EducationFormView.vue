@@ -11,7 +11,7 @@ import { Icon } from "@iconify/vue";
 const getInputSize = (value: string | number | undefined) => {
   const str = String(value || "");
   // Add some padding (2-3 chars) for better appearance
-  return Math.max(str.length);
+  return Math.max(str.length, 1);
 };
 
 // Edit mode state
