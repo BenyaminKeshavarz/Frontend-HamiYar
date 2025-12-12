@@ -10,7 +10,7 @@ import { Icon } from "@iconify/vue";
 // Helper function to calculate input size based on content
 const getInputSize = (value: string | number | undefined) => {
   const str = String(value || "");
-  // Add some padding (2-3 chars) for better appearance
+  if (!str.length) return 15;
   return Math.max(str.length, 1);
 };
 
