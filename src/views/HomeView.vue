@@ -1,59 +1,88 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref, computed, reactive } from "vue";
+import PersonModal from "@/components/PersonModal.vue";
+import { Icon } from "@iconify/vue";
+import { toast } from "vue-sonner";
+import router from "@/router";
+
+type RequestType = "education" | "internship";
+
+const submittingType = ref<RequestType | null>(null);
+
+const identifiers = reactive({
+  education: "",
+  internship: "",
+});
+
+const isSubmittingByType = computed(() => (type: RequestType) => submittingType.value === type);
+
+async function onSubmit(requestType: RequestType, identifier: number): Promise<void> {
+  if (submittingType.value) return;
+
+  submittingType.value = requestType;
+  try {
+    // fake http request to simulate latency
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    console.log("request ok", { requestType, identifier });
+
+    toast.success("موفقیت آمیز!", {
+      description: "اطلاعات مورد نظر یافت شد، درحال انتقال...",
+      richColors: true,
+    });
+
+    identifiers[requestType] = "";
+
+    if (requestType === "education") router.push("/education");
+    else if (requestType === "internship") console.log("internship");
+  } catch (error) {
+    console.error("submit failed", error);
+    toast.error("خطا!", {
+      description: error instanceof Error ? error.message : String(error),
+      richColors: true,
+    });
+  } finally {
+    submittingType.value = null;
+  }
+}
+</script>
 
 <template>
-  <main>
-    <header class="flex-center">
+  <div>
+    <header class="flex-col-center mt-5">
       <img width="160" src="@/assets/images/logo.png" alt="logo" />
     </header>
 
-    <main class="flex-1 flex flex-col justify-center items-center p-8 text-center">
+    <section class="flex-1 flex flex-col justify-center items-center p-8 text-center mt-16">
       <div class="welcome-text">
-        <h1 class="text-2xl mb-4" style="color: #150a2a">به سامانه حامی یار خوش آمدید</h1>
-        <p class="mb-12 text-lg" style="color: #3e1987">
+        <h1 class="text-3xl font-bold mb-4 text-brand-primary-900">به سامانه حامی یار خوش آمدید</h1>
+        <p class="mb-12 text-lg text-brand-primary-700">
           لطفاً جهت انجام امور اداری یکی از گزینه‌های زیر را انتخاب کنید.
         </p>
       </div>
 
-      <div
-        class="flex gap-8 flex-wrap justify-center md:flex-col md:gap-4 md:items-center md:w-full"
-      >
-        <a
-          href="#eshteghal"
-          class="flex flex-col items-center justify-center w-[220px] h-[180px] text-white no-underline rounded-[20px] p-6 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(62,25,135,0.4)] md:w-full md:max-w-[280px] md:h-auto md:flex-row md:justify-start md:gap-6 md:p-8 md:px-4"
-          style="
-            background: linear-gradient(135deg, #6a32d9 0%, #3e1987 100%);
-            box-shadow: 0 10px 25px rgba(62, 25, 135, 0.3);
-          "
+      <div class="gap-8 md:gap-4 grid grid-cols-2 max-w-2xl w-full">
+        <PersonModal
+          v-model="identifiers.education"
+          :is-submitting="isSubmittingByType('education')"
+          @submit="(identifier) => onSubmit('education', identifier)"
         >
-          <i
-            class="fa-solid fa-graduation-cap mb-6 text-6xl md:mb-0 md:text-5xl"
-            style="color: #e2d9f4"
-          ></i>
-          <span class="text-lg font-semibold">نامه اشتغال به تحصیل</span>
-        </a>
+          <template #trigger-content>
+            <Icon icon="mdi:school" class="size-10" />
+            <span class="text-xl">گواهی اشتغال به تحصیل</span>
+          </template>
+        </PersonModal>
 
-        <a
-          href="#karamoozi"
-          class="flex flex-col items-center justify-center w-[220px] h-[180px] text-white no-underline rounded-[20px] p-6 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(62,25,135,0.4)] md:w-full md:max-w-[280px] md:h-auto md:flex-row md:justify-start md:gap-6 md:p-8 md:px-4"
-          style="
-            background: linear-gradient(135deg, #6a32d9 0%, #3e1987 100%);
-            box-shadow: 0 10px 25px rgba(62, 25, 135, 0.3);
-          "
+        <PersonModal
+          v-model="identifiers.internship"
+          :is-submitting="isSubmittingByType('internship')"
+          @submit="(identifier) => onSubmit('internship', identifier)"
         >
-          <i
-            class="fa-solid fa-briefcase mb-6 text-6xl md:mb-0 md:text-5xl"
-            style="color: #e2d9f4"
-          ></i>
-          <span class="text-lg font-semibold">نامه کارآموزی</span>
-        </a>
+          <template #trigger-content>
+            <Icon icon="mdi:briefcase" class="size-10" />
+            <span class="text-xl">نامه کارآموزی</span>
+          </template>
+        </PersonModal>
       </div>
-    </main>
-
-    <footer class="text-center p-6 bg-transparent text-sm" style="color: #3e1987">
-      <p>
-        ساخته شده با <span class="inline-block animate-heartbeat">💜</span> توسط انجمن علمی هوش
-        مصنوعی
-      </p>
-    </footer>
-  </main>
+    </section>
+  </div>
 </template>

@@ -193,8 +193,8 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  /* Primary color mapped to brand-primary-500 - you can change this */
-  --primary: var(--color-brand-primary-500);
+  /* Primary color mapped to brand-primary-600 - you can change this */
+  --primary: var(--color-brand-primary-600);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -205,7 +205,7 @@
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
-  --ring: var(--color-brand-primary-500);
+  --ring: var(--color-brand-primary-600);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -213,12 +213,12 @@
   --chart-5: oklch(0.769 0.188 70.08);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: var(--color-brand-primary-500);
+  --sidebar-primary: var(--color-brand-primary-600);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: var(--color-brand-primary-500);
+  --sidebar-ring: var(--color-brand-primary-600);
 
   /* Brand Primary Color Palette */
   --color-brand-primary-50: #f0ebf9;
@@ -273,7 +273,7 @@
   /* * -----------------------------------------------------
    * ### Base Styles - Global Styles, Typography, Backgrounds
    * -------------------------------------------------------
-     This section defines essential base styles for your 
+     This section defines essential base styles for your
      project, considering Tailwind's defaults.
    * ------------------------------------------------------- */
 
@@ -393,5 +393,10 @@
   /* Hide the password reveal button in Edge */
   ::-ms-reveal {
     display: none;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
   }
 }
