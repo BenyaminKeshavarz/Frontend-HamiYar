@@ -1,6 +1,6 @@
-@import './font-face.css';
-@import 'tailwindcss';
-@import 'tw-animate-css';
+@import "./font-face.css";
+@import "tailwindcss";
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 @custom-variant hover (&:hover);
@@ -79,7 +79,7 @@
 }
 
 @theme {
-  --font-vazir: 'Vazir', sans-serif;
+  --font-vazir: "Vazir", sans-serif;
 
   /* *Custom font weights for typography styling */
   --font-weight-extrablack: 950;
@@ -285,8 +285,8 @@
     scroll-behavior: smooth;
     overflow-x: hidden;
   }
-  html[dir='rtl'] {
-    font-family: 'Vazir', sans-serif;
+  html[dir="rtl"] {
+    font-family: "Vazir", sans-serif;
   }
 
   body {
@@ -309,18 +309,18 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: var(--color-brand-primary-800); /* Transparent track */
+    background: var(--color-background); /* Transparent track */
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: var(--color-brand-primary-400); /* Custom scrollbar thumb color */
+    background-color: var(--color-brand-primary-600); /* Custom scrollbar thumb color */
     border-radius: 10px; /* Rounded thumb */
   }
 
   /* Firefox */
   * {
     scrollbar-width: thin; /* Thin scrollbar in Firefox */
-    scrollbar-color: var(--color-brand-primary-400) var(--color-brand-primary-800); /* Custom scrollbar colors */
+    scrollbar-color: var(--color-brand-primary-600) var(--color-background); /* Custom scrollbar colors */
   }
 
   /* * -----------------------------------------------------
@@ -335,7 +335,7 @@
     margin: 0; /* Remove spin buttons */
   }
 
-  input[type='number'] {
+  input[type="number"] {
     appearance: textfield;
     -moz-appearance: textfield; /* Remove spin buttons in Firefox */
   }
@@ -385,8 +385,8 @@
       Ensures proper text alignment for email and phone inputs.
     * ------------------------------------------------------- */
 
-  input[type='email'],
-  input[type='tel'] {
+  input[type="email"],
+  input[type="tel"] {
     @apply text-left rtl:placeholder:text-right;
   }
 
