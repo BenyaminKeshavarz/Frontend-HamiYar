@@ -14,29 +14,55 @@ import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/vue";
 import router from "@/router";
 
-function handleBackButton() {
-  router.push("/");
+interface Props {
+  confirmText?: string;
+  cancelText?: string;
+  defaultBackButton?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  confirmText: "تأیید خروج",
+  cancelText: "انصراف",
+  defaultBackButton: true,
+});
+
+const emit = defineEmits<{
+  confirm: [];
+}>();
+
+function handleConfirm() {
+  emit("confirm");
+  if (props.defaultBackButton) {
+    router.push("/");
+  }
 }
 </script>
 
 <template>
   <AlertDialog>
     <AlertDialogTrigger as-child>
-      <Button variant="default" size="icon" aria-label="Back" class="fixed left-3 top-3">
-        <Icon icon="icon-park-solid:back" width="48" height="48" />
-      </Button>
+      <slot name="trigger">
+        <Button variant="default" aria-label="Back" class="fixed left-3 top-3">
+          <Icon icon="icon-park-solid:back" width="48" height="48" />
+          بازگشت
+        </Button>
+      </slot>
     </AlertDialogTrigger>
 
     <AlertDialogContent>
       <AlertDialogHeader class="items-start text-start">
-        <AlertDialogTitle>تأیید خروج از صفحه</AlertDialogTitle>
+        <AlertDialogTitle>
+          <slot name="title">تأیید خروج از صفحه</slot>
+        </AlertDialogTitle>
         <AlertDialogDescription class="items-start text-start">
-          با خروج از این صفحه، اطلاعات واردشده ذخیره نخواهد شد. آیا از خروج از صفحه اطمینان دارید؟
+          <slot name="description">
+            با خروج از این صفحه، اطلاعات واردشده ذخیره نخواهد شد. آیا از خروج از صفحه اطمینان دارید؟
+          </slot>
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel>انصراف</AlertDialogCancel>
-        <AlertDialogAction @click="handleBackButton">تأیید خروج</AlertDialogAction>
+        <AlertDialogCancel>{{ cancelText }}</AlertDialogCancel>
+        <AlertDialogAction @click="handleConfirm">{{ confirmText }}</AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>

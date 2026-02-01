@@ -40,3 +40,12 @@ const props = defineProps<ToasterProps>()
     </template>
   </Sonner>
 </template>
+
+<style>
+@media print {
+  [data-sonner-toaster],
+  [data-sonner-toaster] * {
+    display: none !important;
+  }
+}
+</style>
