@@ -286,7 +286,7 @@
     overflow-x: hidden;
   }
   html[dir="rtl"] {
-    font-family: "Vazir", sans-serif;
+    font-family: var(--font-vazir);
   }
 
   body {
@@ -398,5 +398,16 @@
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
+  }
+}
+
+@media print {
+  /* Hide toast notifications when printing */
+  [data-sonner-toaster],
+  [data-sonner-toaster] *,
+  .sonner-toaster,
+  .sonner-toaster * {
+    display: none !important;
+    visibility: hidden !important;
   }
 }
