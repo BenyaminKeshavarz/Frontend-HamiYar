@@ -37,13 +37,13 @@ const isEditMode = defineModel<boolean>("isEditMode", {
 
 const route = useRoute();
 
-// Detect public (QR) mode via route meta
-const isPublicView = computed(() => route.meta.mode === "public");
+const isBlankLayout = computed(() => route.meta.layout === "blank");
+
 </script>
 
 <template>
   <div class="relative">
-    <AlertDialog v-if="!isPublicView"/>
+    <AlertDialog v-if="!isBlankLayout"/>
 
     <div class="flex justify-center items-center py-16 print:p-0 ">
       <div

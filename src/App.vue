@@ -9,7 +9,7 @@ const route = useRoute();
 const isLoginPage = computed(() => route.name === "login");
 
 // Detect public (QR) mode via route meta
-const isPublicView = computed(() => route.meta.mode === "public");
+const isBlankLayout = computed(() => route.meta.layout === "blank");
 </script>
 
 <template>
@@ -18,7 +18,7 @@ const isPublicView = computed(() => route.meta.mode === "public");
       <RouterView />
     </main>
 
-    <FooterSection v-if="!isLoginPage && !isPublicView" class="mt-20" />
+    <FooterSection v-if="!isLoginPage && !isBlankLayout" class="mt-20" />
 
     <Toaster />
   </div>

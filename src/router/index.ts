@@ -28,7 +28,7 @@ const router = createRouter({
       path: '/404',
       name: 'NotFound',
       component: () => import('@/views/NotFound.vue'),
-      meta: { title: `صفحه مورد نظر پیدا نشد | ${appName}`, mode: "public" },
+      meta: { title: `صفحه مورد نظر پیدا نشد | ${appName}`, mode: "public", layout: "blank" },
     },
     {
       // Catch all unmatched routes
@@ -45,7 +45,7 @@ const router = createRouter({
       path: "/login",
       name: "Login",
       component: LoginView,
-      meta: { title: `ورود | ${appName}`, guestOnly: true },
+      meta: { title: `ورود | ${appName}`, guestOnly: true, mode: "public", layout: "blank" },
     },
     {
       path: "/education",
@@ -57,7 +57,7 @@ const router = createRouter({
       path: "/education/:identifier",
       name: "EducationPublic",
       component: () => import("@/views/EducationFormView.vue"),
-      meta: { title: `گواهی اشتغال به تحصیل | ${appName}`, mode: "public" },
+      meta: { title: `گواهی اشتغال به تحصیل | ${appName}`, mode: "public", layout: "blank" },
     },
     {
       path: "/internship",
@@ -69,7 +69,7 @@ const router = createRouter({
       path: "/internship/:identifier",
       name: "InternshipPublic",
       component: () => import("@/views/InternshipFormView.vue"),
-      meta: { title: `نامه کارآموزی | ${appName}`, mode: "public" },
+      meta: { title: `نامه کارآموزی | ${appName}`, mode: "public", layout: "blank" },
     },
   ],
 });
