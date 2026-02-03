@@ -1,18 +1,29 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import AlertDialog from "@/components/AlertDialog.vue";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Icon } from "@iconify/vue";
+import { useRoute } from "vue-router";
 
 interface Props {
   isSubmitted?: boolean;
   isSubmitting?: boolean;
   isFormValid?: boolean;
   showEditModeToggle?: boolean;
+  showEditButton?: boolean;
+  qrImageSrc?: string;
 }
 
-const { isSubmitted = false, isSubmitting = false, isFormValid = false, showEditModeToggle = true } = defineProps<Props>();
+const {
+  isSubmitted = false,
+  isSubmitting = false,
+  isFormValid = false,
+  showEditModeToggle = false,
+  showEditButton = true,
+  qrImageSrc = "@/assets/images/qr-test.jpg",
+} = defineProps<Props>();
 
 const emit = defineEmits<{
   submit: [];
@@ -23,13 +34,18 @@ const emit = defineEmits<{
 const isEditMode = defineModel<boolean>("isEditMode", {
   default: false,
 });
+
+const route = useRoute();
+
+// Detect public (QR) mode via route meta
+const isPublicView = computed(() => route.meta.mode === "public");
 </script>
 
 <template>
   <div class="relative">
-    <AlertDialog />
+    <AlertDialog v-if="!isPublicView"/>
 
-    <div class="flex justify-center items-center pt-16 print:p-0 pb-10">
+    <div class="flex justify-center items-center py-16 print:p-0 ">
       <div
         class="w-[210mm] bg-white mx-auto p-[4mm] relative shadow-[0_0_10px_rgba(0,0,0,0.1)] flex flex-col print:m-0 print:shadow-none print:w-full print:h-dvh print:p-0"
         :class="isSubmitted ? 'h-[297mm]' : 'min-h-[297mm]'">
@@ -65,7 +81,8 @@ const isEditMode = defineModel<boolean>("isEditMode", {
 
             <template v-else>
               <!-- Edit Button -->
-              <Button variant="secondary" size="lg" class="text-base border-2" @click="emit('edit')">
+              <Button v-if="showEditButton" variant="secondary" size="lg" class="text-base border-2"
+                @click="emit('edit')">
                 <Icon icon="mdi:pencil" class="size-6" />
                 ویرایش
               </Button>
@@ -79,8 +96,8 @@ const isEditMode = defineModel<boolean>("isEditMode", {
           </div>
 
           <!-- QR Code -->
-          <figure class="absolute bottom-5 start-5">
-            <img width="150" src="@/assets/images/qr-test.jpg" alt="test qr" />
+          <figure v-if="qrImageSrc" class="absolute bottom-5 start-5">
+            <img width="150" :src="qrImageSrc" alt="qr code" />
           </figure>
 
           <!-- Corner Decorations -->

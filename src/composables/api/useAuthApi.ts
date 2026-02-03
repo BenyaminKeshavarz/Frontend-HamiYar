@@ -5,6 +5,7 @@ import { useAuthJwtStore } from "@/stores/account/useAuthJwtStore"; // Correct s
 // import { useUserRoleStore } from "@/stores/account/useUserRoleStore";
 
 import type { LoginResponse, AuthRequestModal } from "@/types/account/auth";
+import { toast } from "vue-sonner";
 // import type { UserRole } from "@/types/account/role";
 
 export const useAuthApi = () => {
@@ -59,8 +60,15 @@ export const useAuthApi = () => {
     try {
       console.log(`logout - complete this later: ${url}`);
       // await $api.delete(url);
-    } catch (error) {
-      console.error("Logout API call failed:", error);
+    } catch (error: any) {
+      console.error("Error logging out:", error);
+      // Use the pre-extracted message from our interceptor
+      const errorMessage = error.extractedMessage || "خطا در ارتباط با سرور";
+
+      toast.error("خطا در خروج", {
+        description: errorMessage,
+        richColors: true,
+      });
     } finally {
       // Always clear local state, even if the API call fails
       authStore.clearTokens();

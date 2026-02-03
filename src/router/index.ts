@@ -25,6 +25,17 @@ const router = createRouter({
   },
   routes: [
     {
+      path: '/404',
+      name: 'NotFound',
+      component: () => import('@/views/NotFound.vue'),
+      meta: { title: `صفحه مورد نظر پیدا نشد | ${appName}`, mode: "public" },
+    },
+    {
+      // Catch all unmatched routes
+      path: '/:pathMatch(.*)*',
+      redirect: { name: 'NotFound' }
+    },
+    {
       path: "/",
       name: "Home",
       component: HomeView,
@@ -43,10 +54,22 @@ const router = createRouter({
       meta: { title: `گواهی اشتغال به تحصیل | ${appName}`, requiresAuth: true },
     },
     {
+      path: "/education/:identifier",
+      name: "EducationPublic",
+      component: () => import("@/views/EducationFormView.vue"),
+      meta: { title: `گواهی اشتغال به تحصیل | ${appName}`, mode: "public" },
+    },
+    {
       path: "/internship",
       name: "Internship",
       component: () => import("@/views/InternshipFormView.vue"),
       meta: { title: `نامه کارآموزی | ${appName}`, requiresAuth: true },
+    },
+    {
+      path: "/internship/:identifier",
+      name: "InternshipPublic",
+      component: () => import("@/views/InternshipFormView.vue"),
+      meta: { title: `نامه کارآموزی | ${appName}`, mode: "public" },
     },
   ],
 });
@@ -56,13 +79,15 @@ router.beforeEach((to, _, next) => {
   const authStore = useAuthJwtStore();
   const isAuthenticated = authStore.isAuthenticated;
 
+  const isPublicFormView = to.meta.mode === "public";
+
   // Set document title
   if (to.meta.title) {
     document.title = to.meta.title as string;
   }
 
   // Check access permissions
-  if (to.meta.requiresAuth && !isAuthenticated) {
+  if (to.meta.requiresAuth && !isAuthenticated && !isPublicFormView) {
     // Redirect to login and save the intended path
     next({ name: "Login", query: { redirect: to.fullPath } });
   } else if (to.meta.guestOnly && isAuthenticated) {

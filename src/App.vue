@@ -7,6 +7,9 @@ import FooterSection from "@/components/FooterSection.vue";
 
 const route = useRoute();
 const isLoginPage = computed(() => route.name === "login");
+
+// Detect public (QR) mode via route meta
+const isPublicView = computed(() => route.meta.mode === "public");
 </script>
 
 <template>
@@ -15,7 +18,7 @@ const isLoginPage = computed(() => route.name === "login");
       <RouterView />
     </main>
 
-    <FooterSection v-if="!isLoginPage" class="mt-20" />
+    <FooterSection v-if="!isLoginPage && !isPublicView" class="mt-20" />
 
     <Toaster />
   </div>

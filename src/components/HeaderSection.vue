@@ -146,7 +146,7 @@ function handleHashClick(to: string, event: Event) {
           </section>
           <p class="text-brand-primary-800 max-w-2xl text-lg">
             به سامانه یکپارچه خدماتی حامی یار {{ siteConfig.university.name }}
-            <span class="whitespace-nowrap font-medium">({{ siteConfig.university.unit }})</span> خوش
+            <span class="whitespace-nowrap font-medium">({{ siteConfig.university.city }})</span> خوش
             آمدید. از طریق این سامانه میتوانید به خدمات اداری حامی دسترسی داشته باشید.
           </p>
         </section>

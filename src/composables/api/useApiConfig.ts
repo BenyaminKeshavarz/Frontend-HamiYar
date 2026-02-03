@@ -15,13 +15,14 @@ export const useApiConfig = () => {
 
     // * Requests related Endpoints
     requests: {
+      checkStudent: (studentNumber: string) => `${baseUrl}/check-student/${studentNumber}/`,
       education: {
-        get: (studentNumber: number) => `${baseUrl}/education/student/${studentNumber}`,
-        send: `${baseUrl}/education/`,
+        get: (studentNumber: string) => `${baseUrl}/education/student/${studentNumber}/`,
+        submit: `${baseUrl}/education/`,
       },
       internship: {
-        get: (studentNumber: number) => `${baseUrl}/intern/student/${studentNumber}`,
-        send: `${baseUrl}/intern/`,
+        get: (studentNumber: string) => `${baseUrl}/intern/student/${studentNumber}/`,
+        submit: `${baseUrl}/intern/`,
       },
     },
   };

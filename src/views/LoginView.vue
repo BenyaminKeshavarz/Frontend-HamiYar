@@ -16,7 +16,7 @@ import { siteConfig } from "@/config";
         <p class="text-muted-foreground text-sm">
           به سامانه یکپارچه خدماتی حامی یار
           <span class="font-medium">{{ siteConfig.university.name }}</span> <span class="whitespace-nowrap">({{
-            siteConfig.university.unit }})</span>
+            siteConfig.university.city }})</span>
           خوش آمدید.
         </p>
       </div>

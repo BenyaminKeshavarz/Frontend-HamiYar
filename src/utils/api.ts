@@ -70,16 +70,37 @@ axiosInstance.interceptors.response.use(
       await logoutAsync();
     }
 
-    // Extract error messages for easier access
-    if (error.response?.data) {
-      const { messages, message } = error.response.data;
+  // Standardize error messages
+  if (error.response?.data) {
+    const data = error.response.data;
+    let extractedMessages: string[] = [];
 
-      if (messages?.length > 0) error.messages = messages;
-      else if (message) error.messages = [message];
+    if (Array.isArray(data)) {
+      // Handle direct array: ["error message"]
+      extractedMessages = data;
+    } else if (typeof data === 'object') {
+      // Handle object with common fields
+      const possibleFields = ['messages', 'message', 'detail', 'error'];
+      for (const field of possibleFields) {
+        if (data[field]) {
+          extractedMessages = Array.isArray(data[field]) ? data[field] : [data[field]];
+          break;
+        }
+      }
     }
 
-    return Promise.reject(error);
-  },
+    // Fallback if no specific field found but data is string
+    if (extractedMessages.length === 0 && typeof data === 'string') {
+      extractedMessages = [data];
+    }
+
+    // Attach to error object for easy access in components
+    error.extractedMessage = extractedMessages[0] || "خطایی رخ داده است";
+    error.allMessages = extractedMessages;
+  }
+
+  return Promise.reject(error);
+},
 );
 
 const $api = axiosInstance;

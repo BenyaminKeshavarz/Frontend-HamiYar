@@ -49,5 +49,5 @@ function handleBeforeInput(e: InputEvent) {
 
 <template>
   <input v-model="model" @beforeinput="handleBeforeInput" data-slot="input" :class="inputClasses"
-    :inputmode="props.numeric ? 'numeric' : undefined" />
+    :inputmode="props.numeric ? 'numeric' : undefined" :required="props.required"/>
 </template>

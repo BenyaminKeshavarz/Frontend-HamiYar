@@ -61,16 +61,11 @@ const onSubmit = handleSubmit(async (values) => {
     });
 
     resetForm();
-  } catch (error) {
-    console.error("Submission error:", error);
+  } catch (error: any) {
+    console.error("Error submitting support form:", error);
 
-    // Extract error message from API error
-    const errorMessage =
-      error instanceof Error
-        ? error.message
-        : typeof error === "string"
-          ? error
-          : "لطفاً مجدداً تلاش کنید.";
+    // Use the pre-extracted message from our interceptor
+    const errorMessage = error.extractedMessage || "خطا در ارتباط با سرور";
 
     toast.error("خطا در ارسال", {
       description: errorMessage,

@@ -77,7 +77,10 @@ async function handleSubmit(e: Event) {
     const redirectPath = (route.query.redirect as string) || "/";
     router.push(redirectPath);
   } catch (error: any) {
-    const errorMessage = error.messages?.[0] || "نام کاربری یا رمز عبور اشتباه است";
+    console.error("Error logging in:", error);
+
+// Use the pre-extracted message from our interceptor
+const errorMessage = error.extractedMessage || "خطا در ارتباط با سرور";
 
     toast.error("خطا در ورود", {
       description: errorMessage,

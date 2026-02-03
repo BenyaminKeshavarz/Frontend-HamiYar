@@ -5,7 +5,8 @@ import ServiceCard from "@/components/ServiceCard.vue";
 import { ref } from "vue";
 import { toast } from "vue-sonner";
 import router from "@/router";
-
+import { useStudentApi } from "@/composables/api/useStudentApi";
+import { useStudentStore } from "@/stores/student/useStudentStore";
 
 type ServiceType = "education" | "internship";
 
@@ -19,6 +20,9 @@ const isModalOpen = ref(false);
 const identifier = ref("");
 const isSubmitting = ref(false);
 
+const { checkStudent } = useStudentApi();
+const studentStore = useStudentStore();
+
 function openServiceModal(type: ServiceType) {
   currentServiceType.value = type;
   isModalOpen.value = true;
@@ -31,13 +35,15 @@ async function handleServiceRequest(identifier: UserIdentifier): Promise<void> {
   isSubmitting.value = true;
 
   try {
-    // fake http request to simulate latency
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    console.log("request ok", { 
-      serviceType, 
-      type: identifier.type, 
-      value: identifier.value 
-    });
+    // Call check-student API with selected identifier type
+    const response = await checkStudent(identifier.value, identifier.type);
+
+    if (!response.exists || !response.student_info) {
+      throw new Error("دانشجویی با این مشخصات یافت نشد");
+    }
+
+    // Store student info in a single store
+    studentStore.setStudent(response.student_info);
 
     toast.success("موفقیت آمیز!", {
       description: "اطلاعات مورد نظر یافت شد، درحال انتقال...",
@@ -46,24 +52,32 @@ async function handleServiceRequest(identifier: UserIdentifier): Promise<void> {
 
     identifier.value = "";
     isModalOpen.value = false;
+    currentServiceType.value = null;
+    router.push(serviceType === "education" ? "/education" : "/internship");
+  } catch (error: any) {
+    console.error("Error checking student:", error);
 
-    if (serviceType === "education") router.push("/education");
-    else if (serviceType === "internship") router.push("/internship");
-  } catch (error) {
-    console.error("submit failed", error);
+    // Use the pre-extracted message from our interceptor
+const errorMessage = error?.response?.status === 404
+          ? "کاربری با این مشخصات یافت نشد"
+          : error.extractedMessage || "خطا در ارتباط با سرور";
+
     toast.error("خطا!", {
-      description: error instanceof Error ? error.message : String(error),
+      description: errorMessage,
+
       richColors: true,
     });
   } finally {
     isSubmitting.value = false;
-    currentServiceType.value = null;
   }
 }
 </script>
 
 <template>
-  <section id="services" class="flex flex-col justify-center items-center px-8 text-center scroll-mt-24">
+  <section
+    id="services"
+    class="flex flex-col justify-center items-center px-8 text-center scroll-mt-24"
+  >
     <section class="w-max mb-18 flex-col-center gap-4">
       <h2 class="text-3xl font-bold text-foreground">خدمات قابل دسترس</h2>
       <hr class="w-3/5 h-1 bg-brand-primary-500 border-none rounded-full" />
@@ -71,18 +85,28 @@ async function handleServiceRequest(identifier: UserIdentifier): Promise<void> {
 
     <div class="gap-6 flex flex-col md:flex-row w-full max-w-6xl">
       <div class="flex-1 w-full md:w-1/2">
-        <ServiceCard icon="solar:diploma-verified-outline" title="گواهی اشتغال به تحصیل"
+        <ServiceCard
+          icon="solar:diploma-verified-outline"
+          title="گواهی اشتغال به تحصیل"
           description="صدور گواهی اشتغال به تحصیل با وارد کردن کد ملی یا شماره دانشجویی"
-          @start-service="openServiceModal('education')" />
+          @start-service="openServiceModal('education')"
+        />
       </div>
       <div class="flex-1 w-full md:w-1/2">
-        <ServiceCard icon="solar:case-outline" title="نامه کارآموزی"
+        <ServiceCard
+          icon="solar:case-outline"
+          title="نامه کارآموزی"
           description="صدور نامه کارآموزی با وارد کردن کد ملی یا شماره دانشجویی"
-          @start-service="openServiceModal('internship')" />
+          @start-service="openServiceModal('internship')"
+        />
       </div>
     </div>
 
-    <PersonModal v-model:identifier="identifier" v-model:is-open="isModalOpen" :is-submitting="isSubmitting"
-      @submit="handleServiceRequest" />
+    <PersonModal
+      v-model:identifier="identifier"
+      v-model:is-open="isModalOpen"
+      :is-submitting="isSubmitting"
+      @submit="handleServiceRequest"
+    />
   </section>
 </template>
