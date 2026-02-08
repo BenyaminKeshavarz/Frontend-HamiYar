@@ -229,7 +229,7 @@ async function logout() {
           <Button
             variant="default"
             size="sm"
-            class="h-9! sm:h-11! sm:px-6! "
+            class="h-9! sm:h-11! sm:px-4! "
             aria-label="Logout"
             @click="logout"
           >
