@@ -1,8 +1,7 @@
 import { apiConfig } from "@/config";
 
 export const useApiConfig = () => {
-  const { baseUrl } = apiConfig;
-
+  const baseUrl = apiConfig.baseUrl;
   const apiEndpoints = {
     // * Account related Endpoints
     account: {
@@ -17,18 +16,15 @@ export const useApiConfig = () => {
     requests: {
       checkStudent: (studentNumber: string) => `${baseUrl}/check-student/${studentNumber}/`,
       education: {
-        get: (studentNumber: string) => `${baseUrl}/education/student/${studentNumber}/`,
+        get: (trackingNumber: string) => `${baseUrl}/education/${trackingNumber}/`,
         submit: `${baseUrl}/education/`,
       },
       internship: {
-        get: (studentNumber: string) => `${baseUrl}/intern/student/${studentNumber}/`,
+        get: (trackingNumber: string) => `${baseUrl}/intern/${trackingNumber}/`,
         submit: `${baseUrl}/intern/`,
       },
     },
   };
 
-  return {
-    baseUrl,
-    apiEndpoints,
-  };
+  return { apiEndpoints };
 };

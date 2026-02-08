@@ -22,7 +22,7 @@ const emit = defineEmits<{
 
 <template>
   <Card
-    class="group rounded-3xl transition-all duration-300 border-2 w-full relative"
+    class="group rounded-2xl xs:rounded-3xl transition-all duration-300 border-2 w-full min-w-0 relative"
     :class="{
       'hover:shadow-md hover:-translate-y-1': props.isActive,
       'opacity-60 pointer-events-none': !props.isActive,
@@ -34,18 +34,18 @@ const emit = defineEmits<{
 
     <CardHeader class="text-center" :class="{ grayscale: !props.isActive }">
       <div
-        class="p-5 w-max mx-auto rounded-3xl bg-brand-primary-50 mb-4 -mt-16 transition-colors duration-300 border-2"
+        class="p-4 xs:p-5 w-max mx-auto rounded-2xl xs:rounded-3xl bg-brand-primary-50 mb-4 -mt-14 xs:-mt-16 transition-colors duration-300 border-2"
       >
         <Icon
           :icon="props.icon"
-          class="size-15 text-primary transition-all duration-300"
+          class="size-12 xs:size-15 text-primary transition-all duration-300"
           :class="{
             'group-hover:rotate-12 group-hover:scale-110': props.isActive,
           }"
         />
       </div>
 
-      <CardTitle class="text-xl">
+      <CardTitle class="text-lg xs:text-xl">
         {{ props.title }}
       </CardTitle>
     </CardHeader>

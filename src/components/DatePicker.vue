@@ -7,8 +7,7 @@ import {
   today,
   parseDate,
 } from "@internationalized/date";
-import { useDateFormatter } from "reka-ui";
-import { toDate } from "reka-ui/date";
+import { useDate } from "@/composables/useDate";
 import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-vue-next";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -20,9 +19,13 @@ const props = defineProps<{
   highlight?: boolean;
   triggerClass?: string;
   triggerPlaceholderClass?: string;
+  disabled?: boolean;
 }>();
 
 const stringDate = defineModel<string | null>("date");
+
+const { formatDateString } = useDate();
+
 
 const calendarDate = computed({
   get() {
@@ -36,11 +39,14 @@ const calendarDate = computed({
 });
 
 const defaultPlaceholder = toCalendar(today(getLocalTimeZone()), new PersianCalendar());
-const formatter = useDateFormatter("fa");
 
 const isEmpty = computed(() => {
   const value = calendarDate.value;
   return value === null || value === undefined || String(value).trim() === "";
+});
+
+const formattedDate = computed(() => {
+  return formatDateString(stringDate.value);
 });
 </script>
 
@@ -49,6 +55,7 @@ const isEmpty = computed(() => {
     <PopoverTrigger as-child>
       <Button
         variant="outline"
+        :disabled="props.disabled"
         :class="
           cn(
             'w-[240px] justify-start text-left font-normal',
@@ -60,11 +67,7 @@ const isEmpty = computed(() => {
       >
         <CalendarIcon />
         <span v-if="calendarDate">
-          {{
-            formatter.custom(toDate(calendarDate, getLocalTimeZone()), {
-              numberingSystem: "latn",
-            })
-          }}
+          {{ formattedDate }}
         </span>
         <span v-else :class="triggerPlaceholderClass">انتخاب تاریخ</span>
       </Button>

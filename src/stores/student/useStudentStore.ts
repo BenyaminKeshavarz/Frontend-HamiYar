@@ -4,26 +4,17 @@ import type { StudentInfo } from "@/types/requests/student";
 
 export const useStudentStore = defineStore("student", () => {
   const _student = ref<StudentInfo | null>(null);
-  const _exists = ref(false);
-
   const student = computed(() => _student.value);
-  const exists = computed(() => _exists.value);
+  const exists = computed(() => _student.value !== null);
 
-  function setStudent(studentInfo: StudentInfo): void {
-    _student.value = studentInfo;
-    _exists.value = true;
+  function setStudent(info: StudentInfo) {
+    _student.value = info;
   }
 
-  function clearStudent(): void {
+  function clearStudent() {
     _student.value = null;
-    _exists.value = false;
   }
 
-  return {
-    student,
-    exists,
-    setStudent,
-    clearStudent,
-  };
+  return { student, exists, setStudent, clearStudent };
 });
 

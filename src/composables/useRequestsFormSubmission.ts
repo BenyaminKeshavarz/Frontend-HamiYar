@@ -9,57 +9,44 @@ import type { InternshipFormData } from "@/types/requests/internship";
 
 export function useRequestsFormSubmission(
   validateForm: () => boolean,
-  requestType: "education" | "internship"
+  requestType: "education" | "internship",
 ) {
-  // Edit mode state
   const isEditMode = ref(true);
-
-  // Submit state
   const isSubmitted = ref(false);
   const isSubmitting = ref(false);
-
-  // Form validation
   const isFormValid = computed(() => validateForm());
 
-  // API and stores
-  const { submitEducationCertificate } = useEducationApi();
-  const { submitInternshipLetter } = useInternshipApi();
   const educationFormStore = useEducationFormStore();
   const internshipFormStore = useInternshipFormStore();
+  const { submitEducationCertificate } = useEducationApi();
+  const { submitInternshipLetter } = useInternshipApi();
 
-  // Handle form submission
-  async function handleSubmit(formData?: EducationFormData | InternshipFormData | Record<string, any>) {
-    if (!isFormValid.value || isSubmitting.value) return;
+  async function handleSubmit(formData?: EducationFormData | InternshipFormData) {
+    if (!isFormValid.value || isSubmitting.value || !formData) return;
 
     isSubmitting.value = true;
 
     try {
-      if (requestType === "education") {
-        if (!formData) {
-          throw new Error("Form data is required for education request");
-        }
+      let trackingNumber: string;
+      switch (requestType) {
+        case "education":
+          trackingNumber = await submitEducationCertificate(
+            educationFormStore.transformFormDataToRequest(formData as EducationFormData),
+          );
+          educationFormStore.setTrackingNumber(trackingNumber);
+          break;
 
-        // Transform form data to API request format using store method
-        const requestData = educationFormStore.transformFormDataToRequest(formData as EducationFormData);
+        case "internship":
+          trackingNumber = await submitInternshipLetter(
+            internshipFormStore.transformFormDataToRequest(formData as InternshipFormData),
+          );
+          internshipFormStore.setTrackingNumber(trackingNumber);
+          break;
 
-        // Submit education certificate request
-        await submitEducationCertificate(requestData);
-
-        // Update store with response
-        // educationFormStore.setFormDataFromApi(response);
-      } else if (requestType === "internship") {
-        if (!formData) {
-          throw new Error("Form data is required for internship request");
-        }
-
-        // Transform form data to API request format using store method
-        const requestData = internshipFormStore.transformFormDataToRequest(formData as InternshipFormData);
-
-        // Submit internship letter request
-        await submitInternshipLetter(requestData);
+        default:
+          throw new Error("Invalid request type");
       }
 
-      // Success
       isSubmitted.value = true;
       isEditMode.value = false;
 
@@ -68,22 +55,13 @@ export function useRequestsFormSubmission(
         richColors: true,
       });
     } catch (error: any) {
-      console.error("Error submitting requests form:", error);
-
-  // Use the pre-extracted message from our interceptor
-  const errorMessage = error.extractedMessage || "خطا در ارتباط با سرور";
-
       toast.error("خطا در ثبت اطلاعات", {
-        description: errorMessage,
+        description: error.extractedMessage || "خطا در ارتباط با سرور",
         richColors: true,
       });
     } finally {
       isSubmitting.value = false;
     }
-  }
-
-  function printPage() {
-    window.print();
   }
 
   function resetForm() {
@@ -97,7 +75,6 @@ export function useRequestsFormSubmission(
     isSubmitting,
     isFormValid,
     handleSubmit,
-    printPage,
     resetForm,
   };
 }

@@ -20,8 +20,19 @@ export const useDate = () => {
     }
   };
 
+  const formatDateString = (date: string | null | undefined) => {
+    if (!date) return null;
+    try {
+      const parsed = parseDate(date);
+      return formatter.custom(toDate(parsed, getLocalTimeZone()), { numberingSystem: "latn" });
+    } catch {
+      return date;
+    }
+  };
+
   return {
     getToday,
     formatIsoToJalali,
+    formatDateString,
   };
 };

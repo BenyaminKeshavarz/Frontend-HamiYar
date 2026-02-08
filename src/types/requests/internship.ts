@@ -1,5 +1,5 @@
 // Internship letter API types
-import type { University } from "./common";
+import type { Signer, University } from "./common";
 
 export interface InternshipStudent {
   student_number: string;
@@ -18,6 +18,8 @@ export interface InternshipCompany {
   phone: string;
   hr_email: string;
   postal_code: string;
+  name: string; // TODO: Get from API if available
+  department: string; // TODO: Get from API if available
 }
 
 export interface InternshipResponse {
@@ -26,36 +28,26 @@ export interface InternshipResponse {
   time: string;
   teacher: string;
   disciplinarian: boolean;
-  signer: {
-    full_name: string;
-    title: string;
-    university: number;
-    signature_image: string;
-    is_active: boolean;
-  };
+  signer: Signer;
   qr_code_image: string;
-  qr_url: string;
+  qr_url?: string;
+  date: string; // ISO date
+  tracking_number?: string;
 }
 
-// Internship letter request body
+// Internship letter POST request body
 export interface InternshipRequestModel {
-  first_name: string;
-  last_name: string;
   student_number: string;
-  national_id: string;
-  academic_term: string;
-  academic_year: string;
-  education_level: string;
-  education_system: string;
-  field_of_study: string;
   company_name: string;
   company_postal_code: string;
   company_address: string;
-  time: string; // Time format: "01:10:36.800Z"
-  description: string;
+  time: string;
+  course: string; 
   teacher: string;
   disciplinarian: boolean;
-  signer: number;
+  department: string;
+  description?: string; // TODO: Should remove
+  signer?: number; // TODO: Should remove
 }
 
 // Form data structure matching InternshipFormView for UI
@@ -84,7 +76,7 @@ export interface InternshipFormData {
     companyName: string;
     address: string;
     postalCode: string;
-    workplace: string;
+    department: string;
     disciplinarian: boolean;
   };
   signature: {

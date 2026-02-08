@@ -4,63 +4,39 @@ import type {
   EducationCertificateResponse,
   EducationCertificateRequestModel,
 } from "@/types/requests/education";
+import type { SubmitFormResponse } from "@/types/requests/common";
 
 export const useEducationApi = () => {
   const { apiEndpoints } = useApiConfig();
 
-  /**
-   * Get education certificate data by student number or national ID
-   * @param identifier - Student number or national ID
-   * @param type - Type of identifier: "student" or "national"
-   * @returns Education certificate response
-   */
   async function getEducationCertificate(
-    identifier: string,
-    type: "student" | "national",
+    trackingNumber: string,
   ): Promise<EducationCertificateResponse> {
-    // TODO: API endpoint needs to support national ID lookup
-    // For now, only student number is supported
-    if (type === "national") {
-      throw new Error("National ID lookup not yet implemented in API");
-    }
+    const trimmed = trackingNumber?.trim();
+    if (!trimmed) throw new Error("Invalid tracking number");
 
-    // Validate that identifier is not empty
-    if (!identifier || identifier.trim().length === 0) {
-      throw new Error("Invalid student number");
-    }
-
-    const url = apiEndpoints.requests.education.get(identifier);
-
-    // TODO: Complete API implementation when backend is ready
-    // This is a placeholder that will be completed later
-    const response = await $api.get<EducationCertificateResponse>(url);
-
-    if (!response.data) {
-      throw new Error("No data received from API");
-    }
-
+    const response = await $api.get<EducationCertificateResponse>(
+      apiEndpoints.requests.education.get(trimmed),
+    );
+    if (!response.data) throw new Error("No data received from API");
     return response.data;
   }
 
-  /**
-   * Submit education certificate request
-   * @param requestData - Education certificate request data
-   * @returns Education certificate response
-   */
   async function submitEducationCertificate(
     requestData: EducationCertificateRequestModel,
-  ): Promise<EducationCertificateResponse> {
-    const url = apiEndpoints.requests.education.submit;
+  ): Promise<string> {
+    const response = await $api.post<SubmitFormResponse>(
+      apiEndpoints.requests.education.submit,
+      requestData,
+    );
+    if (!response.data) throw new Error("No data received from API");
 
-    // TODO: Complete API implementation when backend is ready
-    // This is a placeholder that will be completed later
-    const response = await $api.post<EducationCertificateResponse>(url, requestData);
-
-    if (!response.data) {
-      throw new Error("No data received from API");
+    // TODO: Remove mock when backend returns tracking_number in POST response
+    let trackingNumber = response.data.tracking_number;
+    if (!trackingNumber) {
+      trackingNumber = "4313955399";
     }
-
-    return response.data;
+    return trackingNumber;
   }
 
   return {

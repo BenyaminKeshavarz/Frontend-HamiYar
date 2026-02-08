@@ -76,19 +76,19 @@ const errorMessage = error?.response?.status === 404
 <template>
   <section
     id="services"
-    class="flex flex-col justify-center items-center px-8 text-center scroll-mt-24"
+    class="flex flex-col justify-center items-center container-padding text-center scroll-mt-20 sm:scroll-mt-24"
   >
-    <section class="w-max mb-18 flex-col-center gap-4">
-      <h2 class="text-3xl font-bold text-foreground">خدمات قابل دسترس</h2>
-      <hr class="w-3/5 h-1 bg-brand-primary-500 border-none rounded-full" />
+    <section class="w-full max-w-max mb-16 flex-col-center gap-4">
+      <h2 class="text-2xl xs:text-3xl font-bold text-foreground">خدمات قابل دسترس</h2>
+      <hr class="w-3/5 max-w-xs h-1 bg-brand-primary-500 border-none rounded-full" />
     </section>
 
-    <div class="gap-6 flex flex-col md:flex-row w-full max-w-6xl">
+    <div class="gap-y-16 gap-x-6 flex flex-col md:flex-row w-full max-w-6xl">
       <div class="flex-1 w-full md:w-1/2">
         <ServiceCard
           icon="solar:diploma-verified-outline"
           title="گواهی اشتغال به تحصیل"
-          description="صدور گواهی اشتغال به تحصیل با وارد کردن کد ملی یا شماره دانشجویی"
+          description="صدور گواهی اشتغال به تحصیل با وارد کردن شماره دانشجویی"
           @start-service="openServiceModal('education')"
         />
       </div>
@@ -96,7 +96,7 @@ const errorMessage = error?.response?.status === 404
         <ServiceCard
           icon="solar:case-outline"
           title="نامه کارآموزی"
-          description="صدور نامه کارآموزی با وارد کردن کد ملی یا شماره دانشجویی"
+          description="صدور نامه کارآموزی با وارد کردن شماره دانشجویی"
           @start-service="openServiceModal('internship')"
         />
       </div>

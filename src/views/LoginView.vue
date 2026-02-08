@@ -4,19 +4,19 @@ import { siteConfig } from "@/config";
 </script>
 
 <template>
-  <div class="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-    <div class="w-full max-w-sm border-2 p-6 py-8 rounded-2xl ">
-      <div class="flex flex-col items-center gap-2 text-center mb-6">
+  <div class="flex min-h-svh w-full items-center justify-center p-4 xs:p-6 md:p-10">
+    <div class="w-full max-w-sm border-2 p-4 xs:p-6 py-6 xs:py-8 rounded-xl xs:rounded-2xl min-w-0">
+      <div class="flex flex-col items-center gap-2 text-center mb-4 xs:mb-6">
         <!-- Logo -->
         <figure class="mb-2">
-          <img width="80" src="@/assets/images/logo.svg" alt="لوگو حامی یار" />
+          <img class="w-16 xs:w-20 h-auto" src="@/assets/images/logo.svg" alt="لوگو حامی یار" />
         </figure>
 
-        <h1 class="text-xl font-bold">ورود به حساب کاربری</h1>
-        <p class="text-muted-foreground text-sm">
+        <h1 class="text-lg xs:text-xl font-bold">ورود به حساب کاربری</h1>
+        <p class="text-muted-foreground text-xs xs:text-sm leading-relaxed wrap-break-word">
           به سامانه یکپارچه خدماتی حامی یار
-          <span class="font-medium">{{ siteConfig.university.name }}</span> <span class="whitespace-nowrap">({{
-            siteConfig.university.city }})</span>
+          <span class="font-medium">{{ siteConfig.university.name }}</span>
+          <span class="whitespace-nowrap">({{ siteConfig.university.city }})</span>
           خوش آمدید.
         </p>
       </div>

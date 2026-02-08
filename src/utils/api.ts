@@ -2,6 +2,7 @@ import { apiConfig } from "@/config";
 import axios from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 
+import router from "@/router";
 import { useApiConfig } from "@/composables/api/useApiConfig";
 import { useAuthApi } from "@/composables/api/useAuthApi";
 import { useAuthJwtStore } from "@/stores/account/useAuthJwtStore.ts";
@@ -68,6 +69,11 @@ axiosInstance.interceptors.response.use(
 
     if (error.response?.status === 401) {
       await logoutAsync();
+    }
+
+    // Global redirect for any 5xx server error
+    if (error.response?.status >= 500 && error.response?.status < 600) {
+      router.replace({ name: "Error", params: { code: "500" } });
     }
 
   // Standardize error messages

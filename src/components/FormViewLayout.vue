@@ -1,108 +1,165 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import AlertDialog from "@/components/AlertDialog.vue";
+import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { Icon } from "@iconify/vue";
 import { useRoute } from "vue-router";
+import type { FormState, FormConfig } from "@/types/forms";
 
-interface Props {
-  isSubmitted?: boolean;
-  isSubmitting?: boolean;
-  isFormValid?: boolean;
-  showEditModeToggle?: boolean;
-  showEditButton?: boolean;
-  qrImageSrc?: string;
-}
+interface Props extends FormState, FormConfig {}
 
-const {
-  isSubmitted = false,
-  isSubmitting = false,
-  isFormValid = false,
-  showEditModeToggle = false,
-  showEditButton = true,
-  qrImageSrc = "@/assets/images/qr-test.jpg",
-} = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  isSubmitted: false,
+  isSubmitting: false,
+  isFormValid: false,
+  isPrintView: false,
+  showEditButton: true,
+});
 
 const emit = defineEmits<{
   submit: [];
   edit: [];
-  print: [];
+  issuance: [];
 }>();
 
-const isEditMode = defineModel<boolean>("isEditMode", {
-  default: false,
-});
+// Used for v-model binding with parent; slot content from parent uses its own isEditMode
+defineModel<boolean>("isEditMode", { default: false });
 
 const route = useRoute();
 
 const isBlankLayout = computed(() => route.meta.layout === "blank");
 
+function handlePrint() {
+  window.print();
+}
 </script>
 
 <template>
   <div class="relative">
-    <AlertDialog v-if="!isBlankLayout"/>
+    <ConfirmDialog
+      v-if="!isBlankLayout"
+      title="تأیید خروج از صفحه"
+      description="با خروج از این صفحه، اطلاعات واردشده ذخیره نخواهد شد. آیا از خروج از صفحه اطمینان دارید؟"
+      confirm-text="تأیید خروج"
+      cancel-text="انصراف"
+      redirect-to="/"
+    >
+      <template #trigger>
+        <Button variant="default" aria-label="Back" class="fixed left-3 top-3">
+          <Icon icon="icon-park-solid:back" width="48" height="48" />
+          بازگشت
+        </Button>
+      </template>
+    </ConfirmDialog>
 
-    <div class="flex justify-center items-center py-16 print:p-0 ">
+    <div class="flex justify-center items-center py-16 print:p-0">
       <div
         class="w-[210mm] bg-white mx-auto p-[4mm] relative shadow-[0_0_10px_rgba(0,0,0,0.1)] flex flex-col print:m-0 print:shadow-none print:w-full print:h-dvh print:p-0"
-        :class="isSubmitted ? 'h-[297mm]' : 'min-h-[297mm]'">
+        :class="props.isSubmitted ? 'h-[297mm]' : 'min-h-[297mm]'"
+      >
         <div class="border-2 border-black w-full h-full flex flex-col p-6 relative grow">
           <!-- Header Slot -->
           <slot name="header" />
 
-          <!-- Edit Mode Toggle -->
-          <div v-if="showEditModeToggle && !isSubmitted" class="flex mb-6 -mt-10 relative z-10">
-            <div dir="ltr" class="flex items-center space-x-2 bg-muted border p-2 rounded-md">
-              <Switch id="airplane-mode" v-model="isEditMode" />
-              <Label for="airplane-mode">فعال کردن حالت قابل ویرایش</Label>
-            </div>
-          </div>
-
           <!-- Body Content Slot -->
           <slot name="body" />
 
-          <!-- Footer Signature Slot -->
+          <!-- Footer Signature -->
+          <footer v-if="props.signature && props.isPrintView" class="w-full flex justify-end my-12">
+            <div class="text-center">
+              <p class="font-medium mb-2 text-sm">{{ props.signature.title }}</p>
+              <p class="font-bold mb-4">{{ props.signature.name }}</p>
+
+              <!-- Signature and seal -->
+              <div class="relative">
+                <p
+                  class="text-neutral-400 text-xs border-t border-dashed border-neutral-300 pt-2 w-40 mx-auto"
+                >
+                  (محل امضا و مهر)
+                </p>
+
+                <img
+                  :src="props.signature.imageUrl"
+                  alt="digital signature"
+                  width="150"
+                  class="absolute -top-3 right-1/2 translate-x-1/2 print:grayscale"
+                />
+              </div>
+            </div>
+          </footer>
+
+          <!-- Footer Slot (for custom footer if needed) -->
           <slot name="footer" />
 
           <!-- Action Buttons -->
           <div class="mt-auto flex gap-3 justify-end print-hidden">
             <!-- Submit Button -->
-            <template v-if="!isSubmitted">
-              <Button variant="default" size="lg" class="text-base" :disabled="!isFormValid || isSubmitting"
-                @click="emit('submit')">
-                <Icon v-if="!isSubmitting" icon="mynaui:save-solid" class="size-6" />
+            <template v-if="!props.isSubmitted">
+              <Button
+                variant="default"
+                size="lg"
+                class="text-base"
+                :disabled="!props.isFormValid || props.isSubmitting"
+                @click="emit('submit')"
+              >
+                <Icon v-if="!props.isSubmitting" icon="mynaui:save-solid" class="size-6" />
                 <Icon v-else icon="gg:spinner" class="size-6 animate-spin" />
-                {{ isSubmitting ? "در حال ثبت..." : "ثبت اطلاعات" }}
+                {{ props.isSubmitting ? "در حال ثبت..." : "ثبت اطلاعات" }}
               </Button>
             </template>
 
             <template v-else>
               <!-- Edit Button -->
-              <Button v-if="showEditButton" variant="secondary" size="lg" class="text-base border-2"
-                @click="emit('edit')">
-                <Icon icon="mdi:pencil" class="size-6" />
-                ویرایش
-              </Button>
+              <!-- TODO: add this later -->
+              <template v-if="false">
+                <Button
+                  v-if="props.showEditButton"
+                  variant="secondary"
+                  size="lg"
+                  class="text-base border-2"
+                  @click="emit('edit')"
+                >
+                  <Icon icon="mdi:pencil" class="size-6" />
+                  ویرایش
+                </Button>
+              </template>
 
-              <!-- Print Button -->
-              <Button variant="default" size="lg" class="text-base" @click="emit('print')">
+              <Button
+                v-if="props.isPrintView"
+                variant="default"
+                size="lg"
+                class="text-base"
+                @click="handlePrint"
+              >
                 <Icon icon="mdi:printer" class="size-6" />
                 چاپ
+              </Button>
+
+              <Button
+                v-else
+                variant="default"
+                size="lg"
+                class="text-base"
+                @click="emit('issuance')"
+              >
+                <Icon icon="mdi:file-document-check" class="size-6" />
+                صدور گواهی
               </Button>
             </template>
           </div>
 
           <!-- QR Code -->
-          <figure v-if="qrImageSrc" class="absolute bottom-5 start-5">
-            <img width="150" :src="qrImageSrc" alt="qr code" />
+          <figure v-if="props.qrImageSrc && props.isPrintView" class="absolute bottom-5 start-5">
+            <img width="150" :src="props.qrImageSrc" alt="qr code" class="print:grayscale" />
           </figure>
 
           <!-- Corner Decorations -->
-          <div class="absolute top-2 left-2 w-4 h-4 border-l-2 border-t-2 border-black opacity-30"></div>
-          <div class="absolute bottom-2 right-2 w-4 h-4 border-r-2 border-b-2 border-black opacity-30"></div>
+          <div
+            class="absolute top-2 left-2 w-4 h-4 border-l-2 border-t-2 border-black opacity-30"
+          ></div>
+          <div
+            class="absolute bottom-2 right-2 w-4 h-4 border-r-2 border-b-2 border-black opacity-30"
+          ></div>
         </div>
       </div>
     </div>

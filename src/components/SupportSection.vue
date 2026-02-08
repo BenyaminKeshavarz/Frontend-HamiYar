@@ -100,20 +100,20 @@ const contactInfo = [
 </script>
 
 <template>
-  <section id="support" class="flex flex-col justify-center items-center px-8 scroll-mt-24">
-    <section class="w-max mb-10 flex-col-center gap-4 text-center">
-      <h2 class="text-3xl font-bold text-foreground">پشتیبانی</h2>
-      <hr class="w-3/5 h-1 bg-brand-primary-500 border-none rounded-full" />
+  <section id="support" class="flex flex-col justify-center items-center container-padding scroll-mt-20 sm:scroll-mt-24">
+    <section class="w-full max-w-max mb-8 sm:mb-10 flex-col-center gap-4 text-center">
+      <h2 class="text-2xl xs:text-3xl font-bold text-foreground">پشتیبانی</h2>
+      <hr class="w-3/5 max-w-xs h-1 bg-brand-primary-500 border-none rounded-full" />
     </section>
 
-    <Card class="w-full max-w-6xl rounded-3xl overflow-hidden border-none gap-0 p-0">
+    <Card class="w-full max-w-6xl rounded-2xl sm:rounded-3xl overflow-hidden border-none gap-0 p-0">
       <div class="grid grid-cols-1 lg:grid-cols-5">
         <!-- Right Side: Contact Information (Dark/Primary Panel) -->
         <section
-          class="lg:col-span-2 bg-brand-primary-500 text-primary-foreground p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
+          class="lg:col-span-2 bg-brand-primary-500 text-primary-foreground p-6 xs:p-8 md:p-12 flex flex-col justify-between relative overflow-hidden rounded-t-2xl sm:rounded-t-3xl lg:rounded-s-3xl lg:rounded-e-none">
           <!-- Content -->
           <div class="relative z-10 space-y-6">
-            <h2 class="text-3xl font-bold tracking-tight">تماس با ما</h2>
+            <h2 class="text-2xl xs:text-3xl font-bold tracking-tight">تماس با ما</h2>
             <p class="text-primary-foreground/80 leading-relaxed">
               برای امور پشتیبانی یا طرح سوالات خود، می‌توانید از راه‌های ارتباطی زیر یا فرم مقابل
               استفاده کنید.
@@ -155,9 +155,9 @@ const contactInfo = [
         </section>
 
         <!-- Left Side: Form -->
-        <section class="lg:col-span-3 p-8 md:p-12 border-2 rounded-3xl border-s-0 rounded-s-none flex flex-col">
-          <div class="mb-10">
-            <h3 class="text-2xl font-bold text-foreground mb-2">ارسال پیام</h3>
+        <section class="lg:col-span-3 p-6 xs:p-8 md:p-12 border-2 rounded-b-2xl sm:rounded-b-3xl lg:rounded-e-3xl lg:rounded-s-none lg:border-s-0 flex flex-col min-w-0">
+          <div class="mb-8 xs:mb-10">
+            <h3 class="text-xl xs:text-2xl font-bold text-foreground mb-2">ارسال پیام</h3>
             <p class="text-muted-foreground">
               فرم زیر را پر کنید، ما در سریع‌ترین زمان پاسخ خواهیم داد.
             </p>

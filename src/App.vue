@@ -4,11 +4,9 @@ import { useRoute } from "vue-router";
 import "vue-sonner/style.css";
 import { Toaster } from "@/components/ui/sonner";
 import FooterSection from "@/components/FooterSection.vue";
+import GlobalLoadingOverlay from "@/components/GlobalLoadingOverlay.vue";
 
 const route = useRoute();
-const isLoginPage = computed(() => route.name === "login");
-
-// Detect public (QR) mode via route meta
 const isBlankLayout = computed(() => route.meta.layout === "blank");
 </script>
 
@@ -18,8 +16,9 @@ const isBlankLayout = computed(() => route.meta.layout === "blank");
       <RouterView />
     </main>
 
-    <FooterSection v-if="!isLoginPage && !isBlankLayout" class="mt-20" />
+    <FooterSection v-if="!isBlankLayout" class="mt-12 sm:mt-16 md:mt-20" />
 
+    <GlobalLoadingOverlay />
     <Toaster />
   </div>
 </template>

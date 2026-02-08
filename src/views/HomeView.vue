@@ -7,7 +7,7 @@ import SupportSection from "@/components/SupportSection.vue";
 <template>
   <div>
     <HeaderSection />
-    <ServicesSection class="mt-24" />
-    <SupportSection class="mt-24" />
+    <ServicesSection class="mt-12 sm:mt-16 md:mt-24" />
+    <SupportSection class="mt-12 sm:mt-16 md:mt-24" />
   </div>
 </template>

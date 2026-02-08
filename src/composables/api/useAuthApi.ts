@@ -1,82 +1,34 @@
 import { useRouter } from "vue-router";
-import $api from "@/utils/api"; // Import the custom axios instance
+import $api from "@/utils/api";
 import { useApiConfig } from "@/composables/api/useApiConfig";
-import { useAuthJwtStore } from "@/stores/account/useAuthJwtStore"; // Correct store name
-// import { useUserRoleStore } from "@/stores/account/useUserRoleStore";
-
+import { useAuthJwtStore } from "@/stores/account/useAuthJwtStore";
 import type { LoginResponse, AuthRequestModal } from "@/types/account/auth";
-import { toast } from "vue-sonner";
-// import type { UserRole } from "@/types/account/role";
 
 export const useAuthApi = () => {
   const { apiEndpoints } = useApiConfig();
   const router = useRouter();
   const authStore = useAuthJwtStore();
-  // const userRoleStore = useUserRoleStore();
+  const { login: loginUrl, logout: logoutUrl } = apiEndpoints.account.auth;
 
-  const authEndpoints = apiEndpoints.account.auth;
-
-  /**
-   * Handle successful login by setting tokens and user data
-   * @param loginResponse - The login response model
-   */
-  function handleSuccessfulLogin(loginResponse: LoginResponse): void {
-    authStore.setTokens(loginResponse.access, loginResponse.refresh);
-    // userRoleStore.setUserRole(loginResponse.role as UserRole);
-  }
-
-  /**
-   * Login user
-   * @param loginRequestModel - The login request model
-   */
   async function loginAsync(loginRequestModel: AuthRequestModal): Promise<void> {
-    const url = authEndpoints.login;
+    const response = await $api.post<LoginResponse>(loginUrl, loginRequestModel);
 
-    // Using generic type for strict type safety
-    const response = await $api.post<LoginResponse>(url, loginRequestModel);
-
-    // In axios, data is directly accessible (no .value needed)
     const loginResponse = response.data;
 
     if (!loginResponse) return;
 
-    // Check for Admin access before logging in
-    // const role = loginResponse.role as UserRole;
-    // if (!userRoleStore.checkAdminAccess(role)) {
-    //   // Create a custom error compatible with your axios interceptor structure
-    // }
-
-    handleSuccessfulLogin(loginResponse);
+    authStore.setTokens(loginResponse.access, loginResponse.refresh);
   }
 
-  /**
-   * Logout user
-   * @param shouldNavigate - flag to check navigation into the login page
-   */
-  async function logoutAsync(shouldNavigate: boolean = true): Promise<void> {
-    // Ensure the endpoint exists in your config
-    const url = authEndpoints.logout;
-
+  async function logoutAsync(shouldNavigate = true): Promise<void> {
     try {
-      console.log(`logout - complete this later: ${url}`);
-      // await $api.delete(url);
-    } catch (error: any) {
-      console.error("Error logging out:", error);
-      // Use the pre-extracted message from our interceptor
-      const errorMessage = error.extractedMessage || "خطا در ارتباط با سرور";
-
-      toast.error("خطا در خروج", {
-        description: errorMessage,
-        richColors: true,
-      });
+      console.log(`logout - complete this later: ${logoutUrl}`);
+      await $api.delete(logoutUrl);
+    } catch {
+      // Clear tokens regardless of API result
     } finally {
-      // Always clear local state, even if the API call fails
       authStore.clearTokens();
-      // userRoleStore.clearUserRole();
-
-      if (shouldNavigate) {
-        router.push("/login");
-      }
+      if (shouldNavigate) router.push("/login");
     }
   }
 

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import "@/types/router";
 import { siteConfig } from "@/config";
 import { useAuthJwtStore } from "@/stores/account/useAuthJwtStore";
 import HomeView from "@/views/HomeView.vue";
@@ -9,93 +10,154 @@ const appName = siteConfig.app.name;
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   scrollBehavior(to, _from, savedPosition) {
-    // If there's a saved position (back/forward navigation), use it
     if (savedPosition) return savedPosition;
-
-    // If there's a hash (anchor link), scroll to that element
     if (to.hash) {
       return {
         el: to.hash,
         behavior: "smooth",
       };
     }
-
-    // Otherwise, scroll to top
     return { top: 0 };
   },
   routes: [
+    // Error routes - dynamic content by status code
     {
-      path: '/404',
-      name: 'NotFound',
-      component: () => import('@/views/NotFound.vue'),
-      meta: { title: `صفحه مورد نظر پیدا نشد | ${appName}`, mode: "public", layout: "blank" },
+      path: "/error",
+      redirect: { name: "Error", params: { code: "404" } },
     },
     {
-      // Catch all unmatched routes
-      path: '/:pathMatch(.*)*',
-      redirect: { name: 'NotFound' }
+      path: "/error/:code",
+      name: "Error",
+      component: () => import("@/views/ErrorView.vue"),
+      meta: {
+        title: `خطا | ${appName}`,
+        mode: "public",
+        layout: "blank",
+      },
     },
     {
-      path: "/",
-      name: "Home",
-      component: HomeView,
-      meta: { title: `صفحه اصلی | ${appName}`, requiresAuth: true },
+      path: "/:pathMatch(.*)*",
+      redirect: { name: "Error", params: { code: "404" } },
     },
+
+    // Public routes
     {
       path: "/login",
       name: "Login",
       component: LoginView,
-      meta: { title: `ورود | ${appName}`, guestOnly: true, mode: "public", layout: "blank" },
+      meta: {
+        title: `ورود | ${appName}`,
+        mode: "public",
+        layout: "blank",
+        guestOnly: true,
+      },
     },
+
+    // Authenticated routes
+    {
+      path: "/",
+      name: "Home",
+      component: HomeView,
+      meta: {
+        title: `صفحه اصلی | ${appName}`,
+        mode: "private",
+      },
+    },
+
+    // Education form routes
     {
       path: "/education",
       name: "Education",
       component: () => import("@/views/EducationFormView.vue"),
-      meta: { title: `گواهی اشتغال به تحصیل | ${appName}`, requiresAuth: true },
+      meta: {
+        title: `گواهی اشتغال به تحصیل | ${appName}`,
+        mode: "private",
+        fixedViewport: true,
+      },
     },
     {
-      path: "/education/:identifier",
+      path: "/education/:trackingNumber",
       name: "EducationPublic",
       component: () => import("@/views/EducationFormView.vue"),
-      meta: { title: `گواهی اشتغال به تحصیل | ${appName}`, mode: "public", layout: "blank" },
+      meta: {
+        title: `گواهی اشتغال به تحصیل | ${appName}`,
+        mode: "public",
+        layout: "blank",
+        fixedViewport: true,
+      },
     },
+
+    // Internship form routes
     {
       path: "/internship",
       name: "Internship",
       component: () => import("@/views/InternshipFormView.vue"),
-      meta: { title: `نامه کارآموزی | ${appName}`, requiresAuth: true },
+      meta: {
+        title: `نامه کارآموزی | ${appName}`,
+        mode: "private",
+        fixedViewport: true,
+      },
     },
     {
-      path: "/internship/:identifier",
+      path: "/internship/:trackingNumber",
       name: "InternshipPublic",
       component: () => import("@/views/InternshipFormView.vue"),
-      meta: { title: `نامه کارآموزی | ${appName}`, mode: "public", layout: "blank" },
+      meta: {
+        title: `نامه کارآموزی | ${appName}`,
+        mode: "public",
+        layout: "blank",
+        fixedViewport: true,
+      },
     },
   ],
 });
 
+const VIEWPORT_DEFAULT = "width=device-width, initial-scale=1.0";
+const VIEWPORT_FIXED = "width=1024";
+
+function setViewport(content: string) {
+  const meta = document.querySelector('meta[name="viewport"]');
+  if (meta) meta.setAttribute("content", content);
+}
+
 // Global Navigation Guard
-router.beforeEach((to, _, next) => {
+router.beforeEach((to, from, next) => {
   const authStore = useAuthJwtStore();
   const isAuthenticated = authStore.isAuthenticated;
 
-  const isPublicFormView = to.meta.mode === "public";
+  // Set viewport: fixed width for form pages (zoom out on mobile)
+  if (to.meta.fixedViewport) {
+    setViewport(VIEWPORT_FIXED);
+  } else if (from?.meta?.fixedViewport) {
+    setViewport(VIEWPORT_DEFAULT);
+  }
 
   // Set document title
   if (to.meta.title) {
-    document.title = to.meta.title as string;
+    document.title = to.meta.title;
   }
 
-  // Check access permissions
-  if (to.meta.requiresAuth && !isAuthenticated && !isPublicFormView) {
-    // Redirect to login and save the intended path
-    next({ name: "Login", query: { redirect: to.fullPath } });
-  } else if (to.meta.guestOnly && isAuthenticated) {
-    // Prevent authenticated users from accessing guest pages
-    next({ name: "Home" });
-  } else {
+  // Handle public routes
+  if (to.meta.mode === "public") {
+    // Guest-only routes: redirect authenticated users
+    if (to.meta.guestOnly && isAuthenticated) {
+      next({ name: "Home" });
+      return;
+    }
+    // Public routes are accessible to everyone
     next();
+    return;
   }
+
+  // Handle private routes (default if mode is not specified)
+  if (to.meta.mode === "private" || !to.meta.mode) {
+    if (!isAuthenticated) {
+      next({ name: "Login", query: { redirect: to.fullPath } });
+      return;
+    }
+  }
+
+  next();
 });
 
 export default router;

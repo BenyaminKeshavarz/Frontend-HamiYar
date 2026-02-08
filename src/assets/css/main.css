@@ -402,6 +402,12 @@
 }
 
 @media print {
+  /* Force backgrounds to print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
   /* Hide toast notifications when printing */
   [data-sonner-toaster],
   [data-sonner-toaster] *,

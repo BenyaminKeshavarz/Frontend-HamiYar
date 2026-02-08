@@ -33,13 +33,13 @@ function handleHashClick(to: string, event: Event) {
 }
 
 async function logout() {
-  await logoutAsync()
+  await logoutAsync();
 }
 </script>
 
 <template>
   <header
-    class="relative px-6 sm:px-10 rounded-b-[4rem] border-b-3 border-brand-primary-200 overflow-hidden bg-brand-primary-100/75"
+    class="relative px-4 xs:px-6 sm:px-10 rounded-b-3xl sm:rounded-b-[4rem] border-b-3 border-brand-primary-200 overflow-hidden bg-brand-primary-100/75"
     style="
       background: linear-gradient(
         135deg,
@@ -204,16 +204,20 @@ async function logout() {
 
     <!-- Content Container with relative positioning -->
     <div class="relative z-10">
-      <nav class="flex-row-between py-3 border-b border-primary/30">
-        <figure class="flex justify-start flex-1">
-          <img width="65" src="@/assets/images/logo.svg" alt="logo" />
+      <nav
+        class="flex flex-wrap items-center justify-between gap-3 py-3 border-b border-primary/30 sm:flex-nowrap"
+      >
+        <figure class="flex justify-start flex-1 min-w-0 shrink-0">
+          <img class="w-12 xs:w-14 sm:w-[65px] h-auto" src="@/assets/images/logo.svg" alt="logo" />
         </figure>
 
-        <ul class="flex-center justify-between gap-x-8 w-full max-w-xs">
+        <ul
+          class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 sm:gap-x-8 order-last w-full sm:order-0 sm:w-auto sm:flex-1 sm:max-w-xs"
+        >
           <li
             v-for="item in navigationItems"
             :key="item.label"
-            class="font-medium hover:text-primary transition-colors duration-300"
+            class="text-sm sm:text-base font-medium hover:text-primary transition-colors duration-300"
           >
             <RouterLink :to="item.to" @click="handleHashClick(item.to, $event)">
               {{ item.label }}
@@ -221,20 +225,30 @@ async function logout() {
           </li>
         </ul>
 
-        <div class="flex flex-1 justify-end">
-          <Button variant="default" size="lg" aria-label="Logout" @click="logout">
-            خروج از حساب
-            <Icon icon="solar:logout-3-line-duotone" class="size-6" />
+        <div class="flex flex-1 justify-end shrink-0">
+          <Button
+            variant="default"
+            size="sm"
+            class="h-9! sm:h-11! sm:px-6! "
+            aria-label="Logout"
+            @click="logout"
+          >
+            <span class="hidden xs:inline">خروج از حساب</span>
+            <Icon icon="solar:logout-3-line-duotone" class="size-5 shrink-0 xs:size-6" />
           </Button>
         </div>
       </nav>
 
-      <section class="flex-col-center py-20">
-        <section class="text-center">
-          <section class="w-fit mx-auto mb-10">
-            <h1 class="text-5xl font-bold text-brand-primary-900">{{ siteConfig.app.name }}</h1>
+      <section class="flex-col-center py-10 sm:py-16 md:py-20 px-2">
+        <section class="text-center w-full min-w-0">
+          <section class="w-fit mx-auto mb-6 sm:mb-10">
+            <h1
+              class="text-3xl xs:text-4xl sm:text-5xl font-bold text-brand-primary-900 wrap-break-word"
+            >
+              {{ siteConfig.app.name }}
+            </h1>
           </section>
-          <p class="text-brand-primary-800 max-w-2xl text-lg">
+          <p class="text-brand-primary-800 max-w-2xl mx-auto text-base sm:text-lg px-1">
             به سامانه یکپارچه خدماتی حامی یار {{ siteConfig.university.name }}
             <span class="whitespace-nowrap font-medium">({{ siteConfig.university.city }})</span>
             خوش آمدید. از طریق این سامانه میتوانید به خدمات اداری حامی دسترسی داشته باشید.

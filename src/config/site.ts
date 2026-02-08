@@ -58,7 +58,7 @@ export const siteConfig: SiteConfig = {
     fullName: "دانشگاه آزاد اسلامی واحد کرج",
   },
   contact: {
-    phone: "026-3452-1234",
+    phone: "026-3418-1234",
     email: "info@kaic.karaj.iau.ir",
   },
   aic: {
