@@ -35,7 +35,7 @@ function handlePrint() {
 </script>
 
 <template>
-  <div class="relative">
+  <div class="relative form-print-root">
     <ConfirmDialog
       v-if="!isBlankLayout"
       title="تأیید خروج از صفحه"
@@ -52,9 +52,9 @@ function handlePrint() {
       </template>
     </ConfirmDialog>
 
-    <div class="flex justify-center items-center py-16 print:p-0">
+    <div class="form-print-wrapper flex justify-center items-center py-16 print:p-0">
       <div
-        class="w-[210mm] bg-white mx-auto p-[4mm] relative shadow-[0_0_10px_rgba(0,0,0,0.1)] flex flex-col print:m-0 print:shadow-none print:w-full print:h-dvh print:p-0"
+        class="form-print-sheet w-[210mm] bg-white mx-auto p-[4mm] relative shadow-[0_0_10px_rgba(0,0,0,0.1)] flex flex-col print:m-0 print:shadow-none"
         :class="props.isSubmitted ? 'h-[297mm]' : 'min-h-[297mm]'"
       >
         <div class="border-2 border-black w-full h-full flex flex-col p-6 relative grow">
@@ -180,6 +180,36 @@ function handlePrint() {
 
   .print-hidden {
     display: none !important;
+  }
+
+  .form-print-root {
+    position: fixed !important;
+    inset: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .form-print-wrapper {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100vw;
+    max-height: 100vh;
+  }
+
+  .form-print-sheet {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-width: 210mm !important;
+    max-height: 297mm !important;
+    padding: 4mm !important;
   }
 }
 </style>

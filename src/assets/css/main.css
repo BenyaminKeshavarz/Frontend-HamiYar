@@ -402,6 +402,12 @@
 }
 
 @media print {
+  /* Print Page Size (A4) */
+  @page {
+    size: 210mm 297mm;
+    margin: 0;
+  }
+
   /* Force backgrounds to print */
   * {
     -webkit-print-color-adjust: exact !important;
